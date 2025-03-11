@@ -10,6 +10,7 @@ import GeniallyController from "./controllers/GeniallyController";
 import CreateGeniallyService from "../contexts/core/genially/application/CreateGeniallyService";
 import DeleteGeniallyService from "../contexts/core/genially/application/DeleteGeniallyService";
 import InMemoryGeniallyRepository from "../contexts/core/genially/infrastructure/InMemoryGeniallyRepository";
+import RenameGeniallyService from "../contexts/core/genially/application/RenameGeniallyService";
 
 // Create Express server
 const app = express();
@@ -17,9 +18,11 @@ const app = express();
 const repository = new InMemoryGeniallyRepository();
 const createGeniallyService = new CreateGeniallyService(repository);
 const deleteGeniallyService = new DeleteGeniallyService(repository);
+const renameGeniallyService = new RenameGeniallyService(repository);
 const geniallyController = new GeniallyController(
   createGeniallyService,
-  deleteGeniallyService
+  deleteGeniallyService,
+  renameGeniallyService
 );
 
 // Express configuration
@@ -35,5 +38,6 @@ app.get("/", healthController.check);
 
 app.post("/genially", (req, res) => geniallyController.create(req, res));
 app.delete("/genially/:id", (req, res) => geniallyController.delete(req, res));
+app.put("/genially/:id", (req, res) => geniallyController.rename(req, res));
 
 export default app;

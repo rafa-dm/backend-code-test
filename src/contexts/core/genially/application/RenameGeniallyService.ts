@@ -1,7 +1,24 @@
-import Genially from "../domain/Genially";
+import GeniallyRepository from "../domain/GeniallyRepository";
+import GeniallyNotExist from "../domain/errors/GeniallyNotExist";
+
+type RenameGeniallyServiceRequest = {
+  id: string;
+  newName: string;
+};
 
 export default class RenameGeniallyService {
-  public async execute(): Promise<Genially> {
-    return undefined;
+  constructor(private repository: GeniallyRepository) {}
+
+  public async execute(req: RenameGeniallyServiceRequest): Promise<void> {
+    const { id, newName } = req;
+
+    const genially = await this.repository.find(id);
+    if (!genially) {
+      throw new GeniallyNotExist(id);
+    }
+
+    genially.rename(newName);
+
+    await this.repository.save(genially);
   }
 }

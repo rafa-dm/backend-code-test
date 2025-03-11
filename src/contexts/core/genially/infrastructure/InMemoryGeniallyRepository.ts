@@ -5,8 +5,12 @@ export default class InMemoryGeniallyRepository implements GeniallyRepository {
   private geniallys: Genially[] = [];
 
   async save(genially: Genially): Promise<void> {
-    await this.delete(genially.id);
-    this.geniallys.push(genially);
+    const index = this.geniallys.findIndex((g) => g.id === genially.id);
+    if (index !== -1) {
+      this.geniallys[index] = genially;
+    } else {
+      this.geniallys.push(genially);
+    }
   }
 
   async find(id: string): Promise<Genially> {

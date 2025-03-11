@@ -1,5 +1,7 @@
 import InvalidGeniallyDescription from "./errors/InvalidGeniallyDescription";
 import InvalidGeniallyName from "./errors/InvalidGeniallyName";
+import SameGeniallyName from "./errors/SameGeniallyName";
+import GeniallyIsDeleted from "./errors/GeniallyIsDeleted";
 
 export default class Genially {
   private _id: string;
@@ -57,5 +59,18 @@ export default class Genially {
 
   public delete(): void {
     this._deletedAt = new Date();
+  }
+
+  public rename(newName: string): void {
+    if (this._deletedAt) {
+      throw new GeniallyIsDeleted(this._id);
+    }
+
+    if (this._name === newName) {
+      throw new SameGeniallyName();
+    }
+    this.validateName(newName);
+    this._name = newName;
+    this._modifiedAt = new Date();
   }
 }

@@ -2,11 +2,16 @@ import { Request, Response } from "express";
 import CreateGeniallyService from "../../contexts/core/genially/application/CreateGeniallyService";
 import DeleteGeniallyService from "../../contexts/core/genially/application/DeleteGeniallyService";
 import GeniallyNotExist from "../../contexts/core/genially/domain/errors/GeniallyNotExist";
+import InvalidGeniallyName from "../../contexts/core/genially/domain/errors/InvalidGeniallyName";
+import RenameGeniallyService from "../../contexts/core/genially/application/RenameGeniallyService";
+import SameGeniallyName from "../../contexts/core/genially/domain/errors/SameGeniallyName";
+import GeniallyIsDeleted from "../../contexts/core/genially/domain/errors/GeniallyIsDeleted";
 
 export default class GeniallyController {
   constructor(
     private createGeniallyService: CreateGeniallyService,
-    private deleteGeniallyService: DeleteGeniallyService
+    private deleteGeniallyService: DeleteGeniallyService,
+    private renameGeniallyService: RenameGeniallyService
   ) {}
 
   async create(req: Request, res: Response): Promise<Response> {
@@ -28,6 +33,26 @@ export default class GeniallyController {
         return res.status(404).json({ error: error.message });
       }
       return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async rename(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const { newName } = req.body;
+
+      await this.renameGeniallyService.execute({ id, newName });
+      return res.status(201).send();
+    } catch (error) {
+      if (
+        error instanceof GeniallyNotExist ||
+        error instanceof InvalidGeniallyName ||
+        error instanceof GeniallyIsDeleted ||
+        error instanceof SameGeniallyName
+      ) {
+        return res.status(400).json({ error: error.message });
+      }
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 }
