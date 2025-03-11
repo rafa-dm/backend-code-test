@@ -11,7 +11,7 @@
     "serve": "node dist/api/server.js",
     "start": "npm run serve",
     "test": "echo \"No test suite was configured.\" && exit 1",
-    "watch-node": "nodemon dist/server.js",
+    "watch-node": "nodemon dist/api/server.js",
     "watch-test": "echo \"No test suite was configured.\" && exit 1",
     "watch-ts": "tsc -w"
   },
@@ -35,7 +35,7 @@
     "@typescript-eslint/parser": "^8.1.0",
     "cross-env": "^7.0.3",
     "errorhandler": "^1.5.1",
-    "eslint": "^9.9.0",
+    "eslint": "^8.57.1",
     "nodemon": "^3.1.4",
     "ts-node-dev": "2.0.0",
     "typescript": "^5.5.4"

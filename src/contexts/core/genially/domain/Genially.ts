@@ -1,3 +1,6 @@
+import InvalidGeniallyDescription from "./errors/InvalidGeniallyDescription";
+import InvalidGeniallyName from "./errors/InvalidGeniallyName";
+
 export default class Genially {
   private _id: string;
   private _name: string;
@@ -7,10 +10,25 @@ export default class Genially {
   private _deletedAt: Date;
 
   constructor(id: string, name: string, description?: string) {
+    this.validateName(name);
+    this.validateDescription(description);
+
     this._id = id;
     this._name = name;
     this._description = description;
     this._createdAt = new Date();
+  }
+
+  private validateName(name: string) {
+    if (!name || name.length < 3 || name.length > 20) {
+      throw new InvalidGeniallyName();
+    }
+  }
+
+  private validateDescription(description: string) {
+    if (description && description.length > 125) {
+      throw new InvalidGeniallyDescription();
+    }
   }
 
   get id(): string {
