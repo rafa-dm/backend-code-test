@@ -14,6 +14,9 @@ export default class InMemoryGeniallyRepository implements GeniallyRepository {
   }
 
   async delete(id: string): Promise<void> {
-    this.geniallys = this.geniallys.filter((genially) => genially.id !== id);
+    const index = this.geniallys.findIndex((genially) => genially.id === id);
+    if (index !== -1) {
+      this.geniallys[index].delete();
+    }
   }
 }
