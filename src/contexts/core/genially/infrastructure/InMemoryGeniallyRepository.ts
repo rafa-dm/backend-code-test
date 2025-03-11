@@ -13,7 +13,7 @@ export default class InMemoryGeniallyRepository implements GeniallyRepository {
     }
   }
 
-  async find(id: string): Promise<Genially> {
+  async find(id: string): Promise<Genially | null> {
     return this.geniallys.find((genially) => genially.id === id) || null;
   }
 
@@ -22,5 +22,9 @@ export default class InMemoryGeniallyRepository implements GeniallyRepository {
     if (index !== -1) {
       this.geniallys[index].delete();
     }
+  }
+
+  async findAll(): Promise<Genially[]> {
+    return this.geniallys;
   }
 }

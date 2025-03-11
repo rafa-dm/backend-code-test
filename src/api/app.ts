@@ -22,7 +22,8 @@ const renameGeniallyService = new RenameGeniallyService(repository);
 const geniallyController = new GeniallyController(
   createGeniallyService,
   deleteGeniallyService,
-  renameGeniallyService
+  renameGeniallyService,
+  repository
 );
 
 // Express configuration
@@ -39,5 +40,9 @@ app.get("/", healthController.check);
 app.post("/genially", (req, res) => geniallyController.create(req, res));
 app.delete("/genially/:id", (req, res) => geniallyController.delete(req, res));
 app.put("/genially/:id", (req, res) => geniallyController.rename(req, res));
+app.get("/genially/details/:id", (req, res) =>
+  geniallyController.findById(req, res)
+);
+app.get("/genially/list", (req, res) => geniallyController.findAll(req, res));
 
 export default app;

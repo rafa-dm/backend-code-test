@@ -6,12 +6,14 @@ import InvalidGeniallyName from "../../contexts/core/genially/domain/errors/Inva
 import RenameGeniallyService from "../../contexts/core/genially/application/RenameGeniallyService";
 import SameGeniallyName from "../../contexts/core/genially/domain/errors/SameGeniallyName";
 import GeniallyIsDeleted from "../../contexts/core/genially/domain/errors/GeniallyIsDeleted";
+import GeniallyRepository from "../../contexts/core/genially/domain/GeniallyRepository";
 
 export default class GeniallyController {
   constructor(
     private createGeniallyService: CreateGeniallyService,
     private deleteGeniallyService: DeleteGeniallyService,
-    private renameGeniallyService: RenameGeniallyService
+    private renameGeniallyService: RenameGeniallyService,
+    private repository: GeniallyRepository
   ) {}
 
   async create(req: Request, res: Response): Promise<Response> {
@@ -27,7 +29,9 @@ export default class GeniallyController {
     try {
       const { id } = req.params;
       await this.deleteGeniallyService.execute({ id });
-      return res.status(204).send();
+      return res
+        .status(200)
+        .json({ message: `Genially ${id} deleted successfully.` });
     } catch (error) {
       if (error instanceof GeniallyNotExist) {
         return res.status(404).json({ error: error.message });
@@ -42,7 +46,9 @@ export default class GeniallyController {
       const { newName } = req.body;
 
       await this.renameGeniallyService.execute({ id, newName });
-      return res.status(201).send();
+      return res.status(201).json({
+        message: `Genially ${id} renamed successfully to "${newName}".`,
+      });
     } catch (error) {
       if (
         error instanceof GeniallyNotExist ||
@@ -53,6 +59,32 @@ export default class GeniallyController {
         return res.status(400).json({ error: error.message });
       }
       return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+  async findById(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const genially = await this.repository.find(id);
+      if (!genially) {
+        return res
+          .status(404)
+          .json({ error: `Genially with ID ${id} not found.` });
+      }
+      return res.status(200).json(genially);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async findAll(req: Request, res: Response): Promise<Response> {
+    try {
+      const geniallys = await this.repository.findAll();
+      return geniallys.length === 0
+        ? res.status(200).json({ message: "Repository is empty" })
+        : res.status(200).json(geniallys);
+    } catch (error) {
+      return res.status(500).json({ error: error });
     }
   }
 }
