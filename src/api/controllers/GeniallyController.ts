@@ -19,7 +19,12 @@ export default class GeniallyController {
   async create(req: Request, res: Response): Promise<Response> {
     try {
       const genially = await this.createGeniallyService.execute(req.body);
-      return res.status(201).json(genially);
+      return res.status(201).json({
+        id: genially.id,
+        name: genially.name,
+        description: genially.description,
+        createdAt: genially.createdAt,
+      });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -46,7 +51,7 @@ export default class GeniallyController {
       const { newName } = req.body;
 
       await this.renameGeniallyService.execute({ id, newName });
-      return res.status(201).json({
+      return res.status(200).json({
         message: `Genially ${id} renamed successfully to "${newName}".`,
       });
     } catch (error) {
