@@ -33,6 +33,7 @@ describe("GeniallyController", () => {
       controller.findById(req, res)
     );
     app.get("/geniallys", (req, res) => controller.findAll(req, res));
+    app.get("/genially/count", (req, res) => controller.count(req, res));
   });
 
   describe("POST /genially - Create Genially", () => {
@@ -152,6 +153,22 @@ describe("GeniallyController", () => {
       expect(response.body).toEqual({
         error: "Genially with ID 999 not found.",
       });
+    });
+  });
+
+  describe("GET /genially/count - Consult counter", () => {
+    it("should return the correct Genially count", async () => {
+      await request(app)
+        .post("/genially")
+        .send({ id: "1", name: "Genially 1", description: "Description 1" });
+      await request(app)
+        .post("/genially")
+        .send({ id: "2", name: "Genially 2", description: "Description 2" });
+
+      const response = await request(app).get("/genially/count");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("count", 2);
     });
   });
 });

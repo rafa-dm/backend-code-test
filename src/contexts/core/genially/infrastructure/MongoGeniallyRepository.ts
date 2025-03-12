@@ -25,6 +25,15 @@ const GeniallyModel = mongoose.model<GeniallyDocument>(
   GeniallySchema
 );
 
+const GeniallyCounterSchema = new Schema({
+  count: { type: Number, default: 0 },
+});
+
+const GeniallyCounterModel = mongoose.model(
+  "GeniallyCounter",
+  GeniallyCounterSchema
+);
+
 export default class MongoGeniallyRepository implements GeniallyRepository {
   async save(genially: Genially): Promise<void> {
     const geniallyData = {
@@ -55,6 +64,19 @@ export default class MongoGeniallyRepository implements GeniallyRepository {
       $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
     });
     return geniallys.map(this.toGenially);
+  }
+
+  async getCount(): Promise<number> {
+    const counter = await GeniallyCounterModel.findOne();
+    return counter ? counter.count : 0;
+  }
+
+  async incrementCount(): Promise<void> {
+    await GeniallyCounterModel.findOneAndUpdate(
+      {},
+      { $inc: { count: 1 } },
+      { upsert: true }
+    );
   }
 
   private toGenially(geniallyDoc: GeniallyDocument): Genially {

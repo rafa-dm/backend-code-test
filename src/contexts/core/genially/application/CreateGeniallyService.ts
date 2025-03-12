@@ -21,6 +21,7 @@ export default class CreateGeniallyService {
 
     const genially = new Genially(id, name, description);
     await this.repository.save(genially);
+    await this.repository.incrementCount();
 
     return genially;
   }

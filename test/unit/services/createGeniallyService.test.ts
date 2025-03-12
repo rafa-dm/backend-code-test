@@ -50,5 +50,21 @@ describe("CreateGeniallyService", () => {
         GeniallyAlreadyExists
       );
     });
+
+    it("should increment the counter when a Genially is created", async () => {
+      await service.execute({
+        id: "1",
+        name: "Test Genially",
+        description: "Description",
+      });
+      await service.execute({
+        id: "2",
+        name: "Another Genially",
+        description: "Description",
+      });
+
+      const count = await repository.getCount();
+      expect(count).toBe(2);
+    });
   });
 });

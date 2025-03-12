@@ -3,6 +3,7 @@ import GeniallyRepository from "../domain/GeniallyRepository";
 
 export default class InMemoryGeniallyRepository implements GeniallyRepository {
   private geniallys: Genially[] = [];
+  private counter = 0;
 
   async save(genially: Genially): Promise<void> {
     const index = this.geniallys.findIndex((g) => g.id === genially.id);
@@ -26,5 +27,13 @@ export default class InMemoryGeniallyRepository implements GeniallyRepository {
 
   async findAll(): Promise<Genially[]> {
     return this.geniallys;
+  }
+
+  async getCount(): Promise<number> {
+    return this.counter;
+  }
+
+  async incrementCount(): Promise<void> {
+    this.counter++;
   }
 }

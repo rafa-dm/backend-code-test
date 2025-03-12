@@ -66,5 +66,6 @@ app.get("/genially/details/:id", (req, res) =>
   geniallyController.findById(req, res)
 );
 app.get("/geniallys", (req, res) => geniallyController.findAll(req, res));
+app.get("/genially/count", (req, res) => geniallyController.count(req, res));
 
 export default app;

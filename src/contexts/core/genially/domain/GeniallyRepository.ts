@@ -8,6 +8,10 @@ interface GeniallyRepository {
   delete(id: string): Promise<void>;
 
   findAll(): Promise<Genially[]>;
+
+  getCount(): Promise<number>;
+
+  incrementCount(): Promise<void>;
 }
 
 export default GeniallyRepository;

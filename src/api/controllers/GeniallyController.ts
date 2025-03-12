@@ -92,4 +92,13 @@ export default class GeniallyController {
       return res.status(500).json({ error: error });
     }
   }
+
+  async count(req: Request, res: Response): Promise<Response> {
+    try {
+      const count = await this.repository.getCount();
+      return res.status(200).json({ count });
+    } catch (error) {
+      return res.status(500).json({ error: error });
+    }
+  }
 }
