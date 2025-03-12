@@ -21,8 +21,10 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
+    "dotenv": "^16.4.7",
     "express": "^4.19.2",
-    "lusca": "^1.7.0"
+    "lusca": "^1.7.0",
+    "mongoose": "^8.12.1"
   },
   "devDependencies": {
     "@types/compression": "^1.7.5",
