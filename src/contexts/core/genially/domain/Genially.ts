@@ -30,18 +30,21 @@ export default class Genially {
     this._deletedAt = deletedAt;
   }
 
+  // Validates that the name is within the allowed length
   private validateName(name: string) {
     if (!name || name.length < 3 || name.length > 20) {
       throw new InvalidGeniallyName();
     }
   }
 
+  // Validates that the description does not exceed the character limit
   private validateDescription(description: string) {
     if (description && description.length > 125) {
       throw new InvalidGeniallyDescription();
     }
   }
 
+  // Getters for accessing private attributes
   get id(): string {
     return this._id;
   }
@@ -66,10 +69,12 @@ export default class Genially {
     return this._deletedAt;
   }
 
+  // Marks the Genially as deleted by setting the deletion timestamp
   public delete(): void {
     this._deletedAt = new Date();
   }
 
+  // Renames the Genially, updating its modification date
   public rename(newName: string): void {
     if (this._deletedAt) {
       throw new GeniallyIsDeleted(this._id);

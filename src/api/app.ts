@@ -4,27 +4,35 @@ import express from "express";
 import lusca from "lusca";
 import dotenv from "dotenv";
 
+
+// Load environment variables
+dotenv.config();
+
 // Controllers (route handlers)
 import * as healthController from "./controllers/health";
-
 import GeniallyController from "./controllers/GeniallyController";
+
+// Services (Use Cases)
 import CreateGeniallyService from "../contexts/core/genially/application/CreateGeniallyService";
 import DeleteGeniallyService from "../contexts/core/genially/application/DeleteGeniallyService";
 import RenameGeniallyService from "../contexts/core/genially/application/RenameGeniallyService";
 
+// Repositories (Persistence Layer)
 import InMemoryGeniallyRepository from "../contexts/core/genially/infrastructure/InMemoryGeniallyRepository";
 import MongoGeniallyRepository from "../contexts/core/genially/infrastructure/MongoGeniallyRepository";
 import mongoose from "mongoose";
 
-dotenv.config();
+
 
 // Create Express server
 const app = express();
-const useMongoDB = process.env.USE_MONGO_DB === "true";
 
+// Determine which repository to use (MongoDB or In-Memory)
+const useMongoDB = process.env.USE_MONGO_DB === "true";
 let repository;
 
 if (useMongoDB) {
+  // Connect to MongoDB
   mongoose
     .connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/genially")
     .then(() => console.log("✅ Connected to MongoDB"))
@@ -38,6 +46,7 @@ if (useMongoDB) {
   repository = new InMemoryGeniallyRepository();
 }
 
+// Initialize services and controller
 const createGeniallyService = new CreateGeniallyService(repository);
 const deleteGeniallyService = new DeleteGeniallyService(repository);
 const renameGeniallyService = new RenameGeniallyService(repository);
@@ -59,6 +68,7 @@ app.use(lusca.xssProtection(true));
 // Primary app routes
 app.get("/", healthController.check);
 
+// Genially API endpoints
 app.post("/genially", (req, res) => geniallyController.create(req, res));
 app.delete("/genially/:id", (req, res) => geniallyController.delete(req, res));
 app.patch("/genially/:id", (req, res) => geniallyController.rename(req, res));

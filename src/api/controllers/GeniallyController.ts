@@ -16,6 +16,8 @@ export default class GeniallyController {
     private repository: GeniallyRepository
   ) {}
 
+  // Creates a new Genially
+
   async create(req: Request, res: Response): Promise<Response> {
     try {
       const genially = await this.createGeniallyService.execute(req.body);
@@ -29,6 +31,8 @@ export default class GeniallyController {
       return res.status(400).json({ error: error.message });
     }
   }
+
+  // Delete a Genially (only modify deletedAt field)
 
   async delete(req: Request, res: Response): Promise<Response> {
     try {
@@ -44,6 +48,8 @@ export default class GeniallyController {
       return res.status(500).json({ error: error.message });
     }
   }
+
+  // Rename an existing Genially
 
   async rename(req: Request, res: Response): Promise<Response> {
     try {
@@ -67,6 +73,8 @@ export default class GeniallyController {
     }
   }
 
+  // Find a Genially for its ID
+
   async findById(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
@@ -82,6 +90,8 @@ export default class GeniallyController {
     }
   }
 
+  // Gets the Genially full list
+
   async findAll(req: Request, res: Response): Promise<Response> {
     try {
       const geniallys = await this.repository.findAll();
@@ -92,6 +102,8 @@ export default class GeniallyController {
       return res.status(500).json({ error: error });
     }
   }
+
+  // Returns the total number of Geniallys created
 
   async count(req: Request, res: Response): Promise<Response> {
     try {
