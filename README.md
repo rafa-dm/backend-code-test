@@ -94,3 +94,47 @@ If you have any questions about the test, you can contact any of us:
 - Francisco (francisco@genially.com)
 
 Good Luck!
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+# 🚀 Additional Features Implemented
+
+In addition to the requested features, the following improvements have been made:
+
+### ✅ Core Features
+- Full **CRUD** implementation for Genially.
+- **Validation**: Name must be between **3-20** characters, and description must not exceed **125** characters.
+- **Soft delete** implementation: When deleting a Genially, it is **marked as deleted** instead of being removed.
+- **Genially Counter**: A counter has been implemented to track the number of Geniallys created. This counter **only increases** when a Genially is created and **is not affected** when a Genially is deleted.
+
+### 🚀 Extra Enhancements
+- ✅ **Dual Repository Support**: The system supports **both an in-memory repository and a MongoDB repository**. Selection is made via an environment variable.
+- ✅ **Automated Tests**:  
+  - **Unit tests** for application services, repositories, controllers...
+  - **Integration tests** for the API endpoints using **Jest and Supertest**.
+- ✅ **Pre-commit Hook with Husky**: Prevents committing if tests fail.
+- ✅ **Dockerized Environment**: Includes **Dockerfile** and **docker-compose.yml** for running the application and MongoDB in a containerized setup.
+
+---
+
+## **📌 How to Run the Project**
+
+1. **Install dependencies**  
+   Run: `npm install`
+
+2. **Set up environment variables (.env file)**  
+
+USE_MONGO_DB=true
+
+MONGO_URI=mongodb://localhost:27017/genially
+
+3. **Run in development mode**  
+Run: `npm run dev`
+
+4. **Run tests**  
+Run: `npm test`
+
+5. **Run with Docker**  
+Run: `docker-compose up --build`
